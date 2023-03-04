@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 func main() {
@@ -43,6 +44,10 @@ func main() {
 
 	matriz3 = winogradOriginal(matriz1, matriz2, matriz3)
 	fmt.Println("\nSe imprime la matriz 3 con el metodo winogradOriginal")
+	imprimirMatriz(matriz3)
+
+	matriz3 = winogradScaled(matriz1, matriz2, matriz3)
+	fmt.Println("\nSe imprime la matriz 3 con el metodo winogradScaled")
 	imprimirMatriz(matriz3)
 }
 
@@ -270,6 +275,62 @@ func winogradOriginal(matriz1 [][]int, matriz2 [][]int, result [][]int) [][]int 
 	}
 	return result
 
+}
+
+func winogradScaled(matriz1 [][]int, matriz2 [][]int, result [][]int) [][]int {
+	n := len(matriz1)
+	p := len(matriz1[0])
+	m := len(matriz2[0])
+	// Crear copias escaladas de A y B
+	copyA := make([][]int, n)
+	for i := 0; i < n; i++ {
+		copyA[i] = make([]int, p)
+	}
+	copyB := make([][]int, p)
+	for i := 0; i < p; i++ {
+		copyB[i] = make([]int, m)
+	}
+	// Factores de escala
+	a := normInf(matriz1, n, p)
+	b := normInf(matriz2, p, m)
+	lambda := int(math.Floor(0.5 + math.Log(float64(b)/float64(a))/math.Log(4)))
+	// Escalado
+	multiplyWithScalar(matriz1, copyA, n, p, int(math.Pow(2, float64(lambda))))
+	multiplyWithScalar(matriz2, copyB, p, m, int(math.Pow(2, float64(-lambda))))
+	// Usando Winograd con matrices escaladas
+	result = winogradOriginal(copyA, copyB, result)
+	return result
+}
+
+/*
+Esta función calcula la norma infinito de una matriz A de tamaño N x P.
+La norma infinito se define como el máximo valor absoluto de la suma de cada fila de la matriz.
+La función devuelve un valor entero que representa la norma infinito de la matriz.
+*/
+func normInf(A [][]int, N int, P int) int {
+	max := 0
+	for i := 0; i < N; i++ {
+		sum := 0
+		for j := 0; j < P; j++ {
+			sum += int(math.Abs(float64(A[i][j])))
+		}
+		if sum > max {
+			max = sum
+		}
+	}
+	return max
+}
+
+/*
+Esta función multiplica cada elemento de una matriz A de tamaño N x P por un escalar entero dado
+y almacena el resultado en una matriz B del mismo tamaño. La función no devuelve ningún valor.
+*/
+func multiplyWithScalar(A [][]int, B [][]int, N int, P int, scalar int) {
+	for i := 0; i < N; i++ {
+		for j := 0; j < P; j++ {
+			B[i][j] = A[i][j] * scalar
+		}
+	}
 }
 
 // Metodo para crear una matriz vacia de tamaño n x m
