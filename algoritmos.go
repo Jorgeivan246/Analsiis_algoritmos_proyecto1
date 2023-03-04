@@ -362,3 +362,195 @@ func llenarMatriz(matriz [][]int) [][]int {
 	}
 	return matriz
 }
+
+/*
+Metodo número 9
+Esta funcion utiliza el metodo strassenNaiv para calcular la multiplicación
+*/
+func strassenNaiv(a, b [][]int) [][]int {
+	n := len(a)
+	c := make([][]int, n)
+	for i := range c {
+		c[i] = make([]int, n)
+	}
+
+	if n == 1 {
+		c[0][0] = a[0][0] * b[0][0]
+	} else {
+		// Divide las matrices en bloques más pequeños
+		m := n / 2
+		a11 := make([][]int, m)
+		a12 := make([][]int, m)
+		a21 := make([][]int, m)
+		a22 := make([][]int, m)
+		b11 := make([][]int, m)
+		b12 := make([][]int, m)
+		b21 := make([][]int, m)
+		b22 := make([][]int, m)
+		for i := 0; i < m; i++ {
+			a11[i], a12[i], a21[i], a22[i] = a[i][:m], a[i][m:], a[i+m][:m], a[i+m][m:]
+			b11[i], b12[i], b21[i], b22[i] = b[i][:m], b[i][m:], b[i+m][:m], b[i+m][m:]
+		}
+
+		// Realiza las operaciones del algoritmo de Strassen
+		p1 := strassenNaiv(a11, sub(b12, b22))
+		p2 := strassenNaiv(add(a11, a12), b22)
+		p3 := strassenNaiv(add(a21, a22), b11)
+		p4 := strassenNaiv(a22, sub(b21, b11))
+		p5 := strassenNaiv(add(a11, a22), add(b11, b22))
+		p6 := strassenNaiv(sub(a12, a22), add(b21, b22))
+		p7 := strassenNaiv(sub(a11, a21), add(b11, b12))
+
+		// Calcula los bloques de la matriz resultante
+		c11 := add(sub(add(p5, p4), p2), p6)
+		c12 := add(p1, p2)
+		c21 := add(p3, p4)
+		c22 := sub(sub(add(p5, p1), p3), p7)
+
+		// Une los bloques para formar la matriz resultante
+		for i := 0; i < m; i++ {
+			copy(c[i][:m], c11[i])
+			copy(c[i][m:], c12[i])
+			copy(c[i+m][:m], c21[i])
+			copy(c[i+m][m:], c22[i])
+		}
+	}
+
+	return c
+}
+
+/*
+Esta funcion es auxiliar del metodo strassenNaiv numero 9
+*/
+func add(a, b [][]int) [][]int {
+	n := len(a)
+	c := make([][]int, n)
+	for i := range c {
+		c[i] = make([]int, n)
+		for j := 0; j < n; j++ {
+			c[i][j] = a[i][j] + b[i][j]
+		}
+	}
+	return c
+}
+
+/*
+Esta funcion es auxiliar del metodo strassenNaiv numero 9
+*/
+func sub(a, b [][]int) [][]int {
+	n := len(a)
+	c := make([][]int, n)
+	for i := 0; i < n; i++ {
+		c[i] = make([]int, n)
+		for j := 0; j < n; j++ {
+			c[i][j] = a[i][j] - b[i][j]
+		}
+	}
+	return c
+}
+
+/*
+Esta funcion es auxiliar del metodo strassenWinograd numero 10
+*/
+func addMatrix(a, b [][]int) [][]int {
+	n := len(a)
+	c := make([][]int, n)
+	for i := 0; i < n; i++ {
+		c[i] = make([]int, n)
+		for j := 0; j < n; j++ {
+			c[i][j] = a[i][j] + b[i][j]
+		}
+	}
+	return c
+}
+
+/*
+Esta funcion es auxiliar del metodo strassenWinograd numero 10
+*/
+func subMatrix(a, b [][]int) [][]int {
+	n := len(a)
+	c := make([][]int, n)
+	for i := 0; i < n; i++ {
+		c[i] = make([]int, n)
+		for j := 0; j < n; j++ {
+			c[i][j] = a[i][j] - b[i][j]
+		}
+	}
+	return c
+}
+
+/*
+*
+Esta funcion es auxiliar del metodo strassenWinograd numero 10
+Función para dividir una matriz en cuatro submatrices más pequeñas
+*
+*/
+func divideMatrix(m [][]int, half int) ([][]int, [][]int, [][]int, [][]int) {
+	a := make([][]int, half)
+	b := make([][]int, half)
+	c := make([][]int, half)
+	d := make([][]int, half)
+	for i := 0; i < half; i++ {
+		a[i] = make([]int, half)
+		b[i] = make([]int, half)
+		c[i] = make([]int, half)
+		d[i] = make([]int, half)
+		copy(a[i], m[i][:half])
+		copy(b[i], m[i][half:])
+		copy(c[i], m[i+half][:half])
+		copy(d[i], m[i+half][half:])
+	}
+	return a, b, c, d
+}
+
+/*
+*
+Esta funcion pertenece al metodo strassenWinograd numero 10
+
+*
+*/
+func strassenWinograd(a, b [][]int) [][]int {
+	n := len(a)
+
+	// Caso base
+	if n == 1 {
+		c := make([][]int, 1)
+		c[0] = make([]int, 1)
+		c[0][0] = a[0][0] * b[0][0]
+		return c
+	}
+
+	// Dividir las matrices en submatrices más pequeñas
+	half := n / 2
+	a11, a12, a21, a22 := divideMatrix(a, half)
+	b11, b12, b21, b22 := divideMatrix(b, half)
+
+	// Calcular las submatrices recursivamente
+	m1 := strassenWinograd(addMatrix(a11, a22), addMatrix(b11, b22))
+	m2 := strassenWinograd(addMatrix(a21, a22), b11)
+	m3 := strassenWinograd(a11, subMatrix(b12, b22))
+	m4 := strassenWinograd(a22, subMatrix(b21, b11))
+	m5 := strassenWinograd(addMatrix(a11, a12), b22)
+	m6 := strassenWinograd(subMatrix(a21, a11), addMatrix(b11, b12))
+	m7 := strassenWinograd(subMatrix(a12, a22), addMatrix(b21, b22))
+
+	// Calcular las submatrices de la matriz resultado
+	c11 := addMatrix(subMatrix(addMatrix(m1, m4), m5), m7)
+	c12 := addMatrix(m3, m5)
+	c21 := addMatrix(m2, m4)
+	c22 := addMatrix(subMatrix(addMatrix(m1, m3), m2), m6)
+
+	// Combinar las submatrices en la matriz resultado
+	c := make([][]int, n)
+	for i := 0; i < half; i++ {
+		c[i] = make([]int, n)
+		copy(c[i][:half], c11[i])
+		copy(c[i][half:], c12[i])
+	}
+	for i := 0; i < half; i++ {
+		c[i+half] = make([]int, n)
+		copy(c[i+half][:half], c21[i])
+		copy(c[i+half][half:], c22[i])
+	}
+	return c
+}
