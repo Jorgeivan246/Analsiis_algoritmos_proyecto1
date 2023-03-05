@@ -19,6 +19,7 @@ func main() {
 	matriz3 = metodoNaivStandard(matriz1, matriz2, matriz3)
 
 	fmt.Println("Se imprime la matriz 3 con el metodo metodoNaivStandard")
+	fmt.Println("hola")
 	imprimirMatriz(matriz3)
 
 	matriz3 = naivOnArray(matriz1, matriz2, matriz3)
