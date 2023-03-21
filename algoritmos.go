@@ -18,37 +18,37 @@ func main() {
 
 	matriz3 = metodoNaivStandard(matriz1, matriz2, matriz3)
 
-	fmt.Println("Se imprime la matriz 3 con el metodo metodoNaivStandard")
-	imprimirMatriz(matriz3)
+	// fmt.Println("Se imprime la matriz 3 con el metodo metodoNaivStandard")
+	// imprimirMatriz(matriz3)
 
-	matriz3 = naivOnArray(matriz1, matriz2, matriz3)
+	// matriz3 = naivOnArray(matriz1, matriz2, matriz3)
 
-	fmt.Println("\nSe imprime la matriz 3 con el metodo naivOnArray")
-	imprimirMatriz(matriz3)
+	// fmt.Println("\nSe imprime la matriz 3 con el metodo naivOnArray")
+	// imprimirMatriz(matriz3)
 
-	matriz3 = naivKahan(matriz1, matriz2, matriz3)
-	fmt.Println("\nSe imprime la matriz 3 con el metodo naivKahan")
-	imprimirMatriz(matriz3)
+	// matriz3 = naivKahan(matriz1, matriz2, matriz3)
+	// fmt.Println("\nSe imprime la matriz 3 con el metodo naivKahan")
+	// imprimirMatriz(matriz3)
 
-	matriz3 = naivLoopUnrollingTwo(matriz1, matriz2, matriz3)
-	fmt.Println("\nSe imprime la matriz 3 con el metodo naivLoopUnrollingTwo")
-	imprimirMatriz(matriz3)
+	// matriz3 = naivLoopUnrollingTwo(matriz1, matriz2, matriz3)
+	// fmt.Println("\nSe imprime la matriz 3 con el metodo naivLoopUnrollingTwo")
+	// imprimirMatriz(matriz3)
 
-	matriz3 = naivLoopUnrollingThree(matriz1, matriz2, matriz3)
-	fmt.Println("\nSe imprime la matriz 3 con el metodo NaivLoopUnrollingThree")
-	imprimirMatriz(matriz3)
+	// matriz3 = naivLoopUnrollingThree(matriz1, matriz2, matriz3)
+	// fmt.Println("\nSe imprime la matriz 3 con el metodo NaivLoopUnrollingThree")
+	// imprimirMatriz(matriz3)
 
-	matriz3 = naivLoopUnrollingFour(matriz1, matriz2, matriz3)
-	fmt.Println("\nSe imprime la matriz 3 con el metodo NaivLoopUnrollingFour")
-	imprimirMatriz(matriz3)
+	// matriz3 = naivLoopUnrollingFour(matriz1, matriz2, matriz3)
+	// fmt.Println("\nSe imprime la matriz 3 con el metodo NaivLoopUnrollingFour")
+	// imprimirMatriz(matriz3)
 
-	matriz3 = winogradOriginal(matriz1, matriz2, matriz3)
-	fmt.Println("\nSe imprime la matriz 3 con el metodo winogradOriginal")
-	imprimirMatriz(matriz3)
+	// matriz3 = winogradOriginal(matriz1, matriz2, matriz3)
+	// fmt.Println("\nSe imprime la matriz 3 con el metodo winogradOriginal")
+	// imprimirMatriz(matriz3)
 
-	matriz3 = winogradScaled(matriz1, matriz2, matriz3)
-	fmt.Println("\nSe imprime la matriz 3 con el metodo winogradScaled")
-	imprimirMatriz(matriz3)
+	// matriz3 = winogradScaled(matriz1, matriz2, matriz3)
+	// fmt.Println("\nSe imprime la matriz 3 con el metodo winogradScaled")
+	// imprimirMatriz(matriz3)
 }
 
 func metodoNaivStandard(matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) [][]int {
@@ -588,4 +588,46 @@ func SequentialBlock(A [][]int, B [][]int, size int, bsize int) [][]int {
 
 	// Devolver la matriz resultante "C".
 	return C
+}
+
+/*
+*
+
+# Esta funcion aplica el metodo Parallel Block numero 12
+
+*
+*/
+func matrixMultiplication(A, B, C [][]float64) [][]float64 {
+	size := len(A)
+	bsize := 32
+
+	for i1 := 0; i1 < size; i1 += bsize {
+		for j1 := 0; j1 < size; j1 += bsize {
+			for k1 := 0; k1 < size; k1 += bsize {
+				for i := i1; i < min(i1+bsize, size); i++ {
+					for j := j1; j < min(j1+bsize, size); j++ {
+						for k := k1; k < min(k1+bsize, size); k++ {
+							A[k][i] += B[k][j] * C[j][i]
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return A
+}
+
+/*
+*
+
+# Esta funcion es auxiliar del metodo numero 11 Parallel Block
+
+*
+*/
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
