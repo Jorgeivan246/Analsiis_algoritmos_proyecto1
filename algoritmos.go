@@ -2,6 +2,13 @@ package main
 
 import (
 	"fmt"
+    "math/rand"
+    "os"
+    "path/filepath"
+    "time"
+	"bufio"
+	"strconv"
+	"strings"
 )
 
 type Algorithm interface {
@@ -9,6 +16,16 @@ type Algorithm interface {
 }
 
 func main() {
+
+	matriz1 := readMatrix("matriz4.txt")
+	matriz2 := matriz1
+	matriz3 := make([][]int, len(matriz1))
+
+	for i := range matriz3 {
+		matriz3[i] = make([]int, len(matriz2[0]))
+	}
+
+	// imprimirMatriz(matriz1)
 
 	var algorithms []Algorithm
 	algorithms = append(algorithms, A1_NaivStandard{})
@@ -19,23 +36,19 @@ func main() {
 	algorithms = append(algorithms, A6_NaivLoopUnrollingFour{})
 	algorithms = append(algorithms, A7_WinogradOriginal{})
 	algorithms = append(algorithms, A8_WinogradScaled{})
-	algorithms = append(algorithms, A9_StrassenNaiv{}) //está haciendo mal la multiplicación
-	algorithms = append(algorithms, A10_StrassenWinograd{}) //está haciendo mal la multiplicación
-	// algorithms = append(algorithms, A11_III_3SequentialBlock{})
-	// algorithms = append(algorithms, A12_III_4ParallelBlock{})
-
-	matriz1 := crearMatriz(3, 3)
-	matriz2 := crearMatriz(3, 3)
-	matriz3 := make([][]int, len(matriz1))
-
-	for i := range matriz3 {
-		matriz3[i] = make([]int, len(matriz2[0]))
-	}
+	//algorithms = append(algorithms, A9_StrassenNaiv{}) //está haciendo mal la multiplicación
+	//algorithms = append(algorithms, A10_StrassenWinograd{}) //está haciendo mal la multiplicación
+	//algorithms = append(algorithms, A11_III_3SequentialBlock{}) //hay que revisarlo
+	//algorithms = append(algorithms, A12_III_4ParallelBlock{}) //hay que revisarlo
 
 	for _, algorithm := range algorithms {
 		fmt.Println("\nAlgoritmo: ")
-		matriz3 = algorithm.Run(matriz1, matriz2, matriz3)
-		imprimirMatriz(matriz3)
+		matrixSize := len(matriz1)
+		//nombre del algoritmo pero sin el "main."
+		algorithmName := strings.Split(fmt.Sprintf("%T", algorithm), ".")[1]
+		fmt.Println(algorithmName + " " + strconv.Itoa(matrixSize) + "x" + strconv.Itoa(matrixSize))
+		//matriz3 = algorithm.Run(matriz1, matriz2, matriz3)
+		//imprimirMatriz(matriz3)
 	}
 }
 
@@ -67,4 +80,61 @@ func llenarMatriz(matriz [][]int) [][]int {
 		}
 	}
 	return matriz
+}
+
+/*
+ * Genera una matriz cuadrada de tamaño n x n con números aleatorios
+ * de 4 digitos, y los almacena en un archivo .txt 
+ * @param n = cantidad de gilas y columnas de la matriz
+ * @param filename = direccion y nombre del archivo.
+ */
+func generateMatrix(n int, filename string) {
+    dir := filepath.Dir("matrices/"+filename)
+    if _, err := os.Stat(dir); os.IsNotExist(err) {
+        os.MkdirAll(dir, 0755)
+    }
+
+    file, err := os.Create("matrices/"+filename)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer file.Close()
+
+    rand.Seed(time.Now().UnixNano())
+
+	for i := 0; i < n; i++ {
+        for j := 0; j < n; j++ {
+            fmt.Fprintf(file, "%04d ", rand.Intn(9000)+1000)
+        }
+        fmt.Fprintln(file)
+    }
+}
+
+func readMatrix(filename string) [][]int {
+    file, err := os.Open("matrices/"+filename)
+    if err != nil {
+        fmt.Println(err)
+        return nil
+    }
+    defer file.Close()
+
+    scanner := bufio.NewScanner(file)
+    var matrix [][]int
+    for scanner.Scan() {
+        line := scanner.Text()
+        fields := strings.Fields(line)
+        var row []int
+        for _, field := range fields {
+            num, err := strconv.Atoi(field)
+            if err != nil {
+                fmt.Println(err)
+                return nil
+            }
+            row = append(row, num)
+        }
+        matrix = append(matrix, row)
+    }
+
+    return matrix
 }
