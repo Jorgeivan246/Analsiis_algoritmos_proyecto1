@@ -15,3 +15,7 @@ matrices/
 
 # Go workspace file
 go.work
+
+
+
+matrices/*.txt
