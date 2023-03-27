@@ -18,24 +18,16 @@ type Algorithm interface {
 
 func main() {
 
-	// matriz1 := readMatrix("matriz3.txt")
-	// matriz2 := matriz1
-	// matriz3 := make([][]int, len(matriz1))
+	matriz1 := readMatrix("matriz4.txt")
+	matriz2 := matriz1
+	matriz3 := make([][]int, len(matriz1))
 
-	// for i := range matriz3 {
-	// 	matriz3[i] = make([]int, len(matriz2[0]))
-	// }
+	for i := range matriz3 {
+		matriz3[i] = make([]int, len(matriz2[0]))
+	}
 
-	// imprimirMatriz(matriz1)
-
-	// var algorithms []Algorithm
-	// a1 := A1_NaivStandard{}
-
-	// // algorithms = append(algorithms, a1)
-
-	// matriz3 = a1.NaivStandard(matriz1, matriz2, matriz3)
-
-	// imprimirMatriz(matriz3)
+	var algorithms []Algorithm
+	algorithms = append(algorithms, A1_NaivStandard{})
 	// algorithms = append(algorithms, A2_NaivOnArray{})
 	// algorithms = append(algorithms, A3_NaivKahan{})
 	// algorithms = append(algorithms, A4_NaivLoopUnrollingTwo{})
@@ -47,16 +39,26 @@ func main() {
 	// algorithms = append(algorithms, A10_StrassenWinograd{})     //está haciendo mal la multiplicación
 	// algorithms = append(algorithms, A11_III_3SequentialBlock{}) //hay que revisarlo
 	// algorithms = append(algorithms, A12_III_4ParallelBlock{})   //hay que revisarlo
+	var tiempo
+	for _, algorithm := range algorithms {
+		fmt.Println("\nAlgoritmo: ")
+		matrixSize := len(matriz1)
+		//nombre del algoritmo pero sin el "main."
+		algorithmName := strings.Split(fmt.Sprintf("%T", algorithm), ".")[1]
+		fmt.Println(algorithmName + " " + strconv.Itoa(matrixSize) + "x" + strconv.Itoa(matrixSize))
+		start := time.Now()
 
-	// for _, algorithm := range algorithms {
-	// 	fmt.Println("\nAlgoritmo: ")
-	// 	matrixSize := len(matriz1)
-	// 	//nombre del algoritmo pero sin el "main."
-	// 	algorithmName := strings.Split(fmt.Sprintf("%T", algorithm), ".")[1]
-	// 	fmt.Println(algorithmName + " " + strconv.Itoa(matrixSize) + "x" + strconv.Itoa(matrixSize))
-	// 	//matriz3 = algorithm.Run(matriz1, matriz2, matriz3)
-	// 	//imprimirMatriz(matriz3)
-	// }
+		// tiempo transcurrido desde el inicio
+
+		matriz3 = algorithm.Run(matriz1, matriz2, matriz3)
+		elapsed := time.Since(start)
+
+		elapsedSeconds := float64(elapsed) / float64(time.Second)
+
+
+		tiempo=elapsedSeconds
+		//imprimirMatriz(matriz3)
+	}
 
 	url := "https://script.google.com/macros/s/AKfycbxr7hkHFBYpIedsbSWq91jGiOnMbk1iGTYaCbG5VsHAcWB8IphUbL1_lJjysd4Zu57ZIg/exec?"
 
@@ -64,9 +66,9 @@ func main() {
 
 	columna := "4"
 
-	tiempo := "3"
-
 	tamanoMatriz := "2"
+
+	tiempo := strconv.FormatFloat(elapsedSeconds, 'f', 6, 64)
 
 	url = url + "idAlgo=" + idAlgo + "&" + "tamMatriz=" + columna + "&" + "tiempo=" + tiempo + "&" + "tamanoMatriz=" + tamanoMatriz
 
