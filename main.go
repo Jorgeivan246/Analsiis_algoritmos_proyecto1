@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"math/rand"
 	"net/http"
 	"os"
@@ -12,77 +13,131 @@ import (
 	"time"
 )
 
-type Algorithm interface {
+type algoritmo interface {
 	Run(matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) [][]int
 }
 
 func main() {
 
-	matriz1 := readMatrix("matriz4.txt")
-	matriz2 := matriz1
-	matriz3 := make([][]int, len(matriz1))
+	var algoritmos []algoritmo
+	algoritmos = append(algoritmos, A1_NaivStandard{})
+	algoritmos = append(algoritmos, A2_NaivOnArray{})
+	algoritmos = append(algoritmos, A3_NaivKahan{})
+	algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
+	algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
+	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
+	algoritmos = append(algoritmos, A7_WinogradOriginal{})
+	algoritmos = append(algoritmos, A8_WinogradScaled{})
+	// algoritmos = append(algoritmos, A9_StrassenNaiv{}) //está haciendo mal la multiplicación
+	// algoritmos = append(algoritmos, A10_StrassenWinograd{})     //está haciendo mal la multiplicación
+	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{}) //hay que revisarlo
+	// algoritmos = append(algoritmos, A12_III_4ParallelBlock{})   //hay que revisarlo
+
+	enviarDatosAlServidor(algoritmos)
+
+}
+
+func enviarDatosAlServidor(algoritmos []algoritmo) {
+
+	url := "https://script.google.com/macros/s/AKfycbxODvkzedb9yE9Unwtj6sf6x0AS27mB2Mt3UHMKLABoIsCX3KxW-v7pa0-F_3sSF5UZmw/exec"
+
+	var tiempo float64 = 0.000000
+
+	var idAlgoritmo = 4
+
+	var matriz1 [][]int
+
+	var matriz2 [][]int
+
+	var matriz3 [][]int
+
+	var cantidadDatosPrueba = 4
+
+	var tamanoMatrizAleer = 1
+
+	var tamanoMatriz2 = 0
+
+	var columna = 4
+
+	for _, algoritmo := range algoritmos {
+		fmt.Println("\nAlgoritmo: ")
+		matrixSize := len(matriz1)
+		//nombre del algoritmo pero sin el "main."
+		algoritmoName := strings.Split(fmt.Sprintf("%T", algoritmo), ".")[1]
+		fmt.Println(algoritmoName + " " + strconv.Itoa(matrixSize) + "x" + strconv.Itoa(matrixSize))
+		tamanoMatrizAleer = 1
+		for i := 0; i < cantidadDatosPrueba; i++ {
+
+			matriz3, matriz2, matriz1, tamanoMatriz2 = inicializarMatrizTamanoIgual(tamanoMatrizAleer, matriz1, matriz2, matriz3)
+
+			start := time.Now()
+			matriz3 = algoritmo.Run(matriz1, matriz2, matriz3)
+
+			elapsed := time.Since(start)
+
+			elapsedSeconds := float64(elapsed) / float64(time.Second)
+
+			tiempo = elapsedSeconds
+
+			tiempo2 := strconv.FormatFloat(tiempo, 'f', 6, 64)
+
+			fmt.Println(tiempo2)
+
+			fmt.Println(idAlgoritmo, columna)
+
+			url = url + "?" + "idAlgo=" + strconv.Itoa(idAlgoritmo) + "&" + "columna=" + strconv.Itoa(columna) + "&" + "tamanoMatriz=" + strconv.Itoa(tamanoMatriz2) + "&" + "tiempo=" + tiempo2
+
+			fmt.Println(url)
+
+			resp, err := http.Get(url)
+			if err != nil {
+				fmt.Println("Error al enviar solicitud:", err)
+				return
+			}
+
+			defer resp.Body.Close()
+
+			fmt.Println("Código de respuesta:", resp.Status)
+			tamanoMatrizAleer = tamanoMatrizAleer + 1
+
+			columna = columna + 2
+
+			url = "https://script.google.com/macros/s/AKfycbxODvkzedb9yE9Unwtj6sf6x0AS27mB2Mt3UHMKLABoIsCX3KxW-v7pa0-F_3sSF5UZmw/exec"
+
+		}
+
+		idAlgoritmo = idAlgoritmo + 1
+		columna = 4
+	}
+
+}
+
+func inicializarMatrizTamanoIgual(tamanoMatriz int, matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) ([][]int, [][]int, [][]int, int) {
+
+	tamano := float64(math.Pow(2, float64(tamanoMatriz)))
+
+	tamanoEntero := int(tamano)
+
+	fmt.Println("Esta leyendo " + strconv.Itoa(tamanoEntero))
+	nommbreMatriz := "matriz" + strconv.Itoa(tamanoEntero) + ".txt"
+
+	matriz1 = readMatrix(nommbreMatriz)
+
+	matriz2 = make([][]int, len(matriz1))
+
+	for i := range matriz1 {
+		matriz2[i] = make([]int, len(matriz1[i]))
+		copy(matriz2[i], matriz1[i])
+	}
+
+	matriz3 = make([][]int, len(matriz1))
 
 	for i := range matriz3 {
 		matriz3[i] = make([]int, len(matriz2[0]))
 	}
+	tamanoMatriz = tamanoMatriz + 1
 
-	var algorithms []Algorithm
-	algorithms = append(algorithms, A1_NaivStandard{})
-	// algorithms = append(algorithms, A2_NaivOnArray{})
-	// algorithms = append(algorithms, A3_NaivKahan{})
-	// algorithms = append(algorithms, A4_NaivLoopUnrollingTwo{})
-	// algorithms = append(algorithms, A5_NaivLoopUnrollingThree{})
-	// algorithms = append(algorithms, A6_NaivLoopUnrollingFour{})
-	// algorithms = append(algorithms, A7_WinogradOriginal{})
-	// algorithms = append(algorithms, A8_WinogradScaled{})
-	// algorithms = append(algorithms, A9_StrassenNaiv{}) //está haciendo mal la multiplicación
-	// algorithms = append(algorithms, A10_StrassenWinograd{})     //está haciendo mal la multiplicación
-	// algorithms = append(algorithms, A11_III_3SequentialBlock{}) //hay que revisarlo
-	// algorithms = append(algorithms, A12_III_4ParallelBlock{})   //hay que revisarlo
-	var tiempo
-	for _, algorithm := range algorithms {
-		fmt.Println("\nAlgoritmo: ")
-		matrixSize := len(matriz1)
-		//nombre del algoritmo pero sin el "main."
-		algorithmName := strings.Split(fmt.Sprintf("%T", algorithm), ".")[1]
-		fmt.Println(algorithmName + " " + strconv.Itoa(matrixSize) + "x" + strconv.Itoa(matrixSize))
-		start := time.Now()
-
-		// tiempo transcurrido desde el inicio
-
-		matriz3 = algorithm.Run(matriz1, matriz2, matriz3)
-		elapsed := time.Since(start)
-
-		elapsedSeconds := float64(elapsed) / float64(time.Second)
-
-
-		tiempo=elapsedSeconds
-		//imprimirMatriz(matriz3)
-	}
-
-	url := "https://script.google.com/macros/s/AKfycbxr7hkHFBYpIedsbSWq91jGiOnMbk1iGTYaCbG5VsHAcWB8IphUbL1_lJjysd4Zu57ZIg/exec?"
-
-	idAlgo := "4"
-
-	columna := "4"
-
-	tamanoMatriz := "2"
-
-	tiempo := strconv.FormatFloat(elapsedSeconds, 'f', 6, 64)
-
-	url = url + "idAlgo=" + idAlgo + "&" + "tamMatriz=" + columna + "&" + "tiempo=" + tiempo + "&" + "tamanoMatriz=" + tamanoMatriz
-
-	fmt.Println(url)
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Println("Error al enviar solicitud:", err)
-		return
-	}
-
-	defer resp.Body.Close()
-
-	fmt.Println("Código de respuesta:", resp.Status)
-
+	return matriz3, matriz2, matriz1, tamanoEntero
 }
 
 // Metodo para crear una matriz vacia de tamaño n x m
@@ -98,6 +153,7 @@ func crearMatriz(n int, m int) [][]int {
 
 // Metodo para imprimir una matriz
 func imprimirMatriz(matriz [][]int) {
+	fmt.Println("Se imprime la matriz")
 	for i := 0; i < len(matriz); i++ {
 		fmt.Println(matriz[i])
 	}
@@ -116,10 +172,10 @@ func llenarMatriz(matriz [][]int) [][]int {
 }
 
 /*
- * Genera una matriz cuadrada de tamaño n x n con números aleatorios
- * de 4 digitos, y los almacena en un archivo .txt
- * @param n = cantidad de gilas y columnas de la matriz
- * @param filename = direccion y nombre del archivo.
+* Genera una matriz cuadrada de tamaño n x n con números aleatorios
+* de 4 digitos, y los almacena en un archivo .txt
+* @param n = cantidad de gilas y columnas de la matriz
+* @param filename = direccion y nombre del archivo.
  */
 func generateMatrix(n int, filename string) {
 	dir := filepath.Dir("matrices/" + filename)

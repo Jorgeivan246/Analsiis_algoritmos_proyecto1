@@ -12,6 +12,7 @@ func (a A1_NaivStandard) NaivStandard(matriz1 [][]int, matriz2 [][]int, matriz3 
 			}
 		}
 	}
+
 	return matriz3
 }
 
