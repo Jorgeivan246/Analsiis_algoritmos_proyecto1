@@ -28,8 +28,8 @@ func main() {
 	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
 	algoritmos = append(algoritmos, A7_WinogradOriginal{})
 	algoritmos = append(algoritmos, A8_WinogradScaled{})
-	// algoritmos = append(algoritmos, A9_StrassenNaiv{}) //está haciendo mal la multiplicación
-	// algoritmos = append(algoritmos, A10_StrassenWinograd{})     //está haciendo mal la multiplicación
+	algoritmos = append(algoritmos, A9_StrassenNaiv{})
+	algoritmos = append(algoritmos, A10_StrassenWinograd{})
 	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{}) //hay que revisarlo
 	// algoritmos = append(algoritmos, A12_III_4ParallelBlock{})   //hay que revisarlo
 
@@ -41,7 +41,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 	url := "https://script.google.com/macros/s/AKfycbxODvkzedb9yE9Unwtj6sf6x0AS27mB2Mt3UHMKLABoIsCX3KxW-v7pa0-F_3sSF5UZmw/exec"
 
-	var tiempo float64 = 0.000000
+	var tiempo float64 = 0.0000000
 
 	var idAlgoritmo = 4
 
@@ -51,7 +51,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var cantidadDatosPrueba = 4
+	var cantidadDatosPrueba = 12
 
 	var tamanoMatrizAleer = 1
 
@@ -103,7 +103,6 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 			columna = columna + 2
 
 			url = "https://script.google.com/macros/s/AKfycbxODvkzedb9yE9Unwtj6sf6x0AS27mB2Mt3UHMKLABoIsCX3KxW-v7pa0-F_3sSF5UZmw/exec"
-
 		}
 
 		idAlgoritmo = idAlgoritmo + 1
