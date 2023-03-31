@@ -79,7 +79,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 			tiempo = elapsedSeconds
 
-			tiempo2 := strconv.FormatFloat(tiempo, 'f', 6, 64)
+			tiempo2 := strconv.FormatFloat(tiempo, 'f', 8, 64)
 
 			fmt.Println(tiempo2)
 
