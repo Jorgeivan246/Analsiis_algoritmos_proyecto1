@@ -21,27 +21,50 @@ func main() {
 
 	var algoritmos []algoritmo
 	algoritmos = append(algoritmos, A1_NaivStandard{})
-	algoritmos = append(algoritmos, A2_NaivOnArray{})
-	algoritmos = append(algoritmos, A3_NaivKahan{})
-	algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
-	algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
-	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
-	algoritmos = append(algoritmos, A7_WinogradOriginal{})
-	algoritmos = append(algoritmos, A8_WinogradScaled{})
-	algoritmos = append(algoritmos, A9_StrassenNaiv{})
+	// algoritmos = append(algoritmos, A2_NaivOnArray{})
+	// algoritmos = append(algoritmos, A3_NaivKahan{})
+	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
+	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
+	// algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
+	// algoritmos = append(algoritmos, A7_WinogradOriginal{})
+	// algoritmos = append(algoritmos, A8_WinogradScaled{})
+	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
 	algoritmos = append(algoritmos, A10_StrassenWinograd{})
-	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{}) //hay que revisarlo
+	algoritmos = append(algoritmos, A11_III_3SequentialBlock{}) //hay que revisarlo
 	// algoritmos = append(algoritmos, A12_III_4ParallelBlock{})   //hay que revisarlo
 
-	enviarDatosAlServidor(algoritmos)
+	probarALgoritmo(algoritmos)
+}
 
+func probarALgoritmo(algoritmos []algoritmo) {
+
+	var matriz1 [][]int
+
+	var matriz2 [][]int
+
+	var matriz3 [][]int
+
+	var tamanoMatrizAleer = 1
+
+	var tamanoMatriz2 = 0
+
+	matriz3, matriz2, matriz1, tamanoMatriz2 = inicializarMatrizTamanoIgual(tamanoMatrizAleer, matriz1, matriz2, matriz3)
+	// enviarDatosAlServidor(algoritmos)
+
+	for _, algoritmo := range algoritmos {
+
+		matriz3 = algoritmo.Run(matriz1, matriz2, matriz3)
+		imprimirMatriz(matriz3)
+	}
+
+	tamanoMatriz2 = tamanoMatriz2 + 1
 }
 
 func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 	url := "https://script.google.com/macros/s/AKfycbxODvkzedb9yE9Unwtj6sf6x0AS27mB2Mt3UHMKLABoIsCX3KxW-v7pa0-F_3sSF5UZmw/exec"
 
-	var tiempo float64 = 0.0000000
+	var tiempo float64 = 0.00000000
 
 	var idAlgoritmo = 4
 
@@ -51,7 +74,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var cantidadDatosPrueba = 12
+	var cantidadCasosPrueba = 8
 
 	var tamanoMatrizAleer = 1
 
@@ -66,7 +89,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 		algoritmoName := strings.Split(fmt.Sprintf("%T", algoritmo), ".")[1]
 		fmt.Println(algoritmoName + " " + strconv.Itoa(matrixSize) + "x" + strconv.Itoa(matrixSize))
 		tamanoMatrizAleer = 1
-		for i := 0; i < cantidadDatosPrueba; i++ {
+		for i := 0; i < cantidadCasosPrueba; i++ {
 
 			matriz3, matriz2, matriz1, tamanoMatriz2 = inicializarMatrizTamanoIgual(tamanoMatrizAleer, matriz1, matriz2, matriz3)
 
