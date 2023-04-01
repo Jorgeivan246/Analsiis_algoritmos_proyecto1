@@ -1,6 +1,9 @@
 package main
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 type A11_III_3SequentialBlock struct {
 }
@@ -49,14 +52,16 @@ func obtenerLongitudBsize(matriz1 [][]int) int {
 	mapa_bsize["16"] = 4
 	mapa_bsize["32"] = 5
 	mapa_bsize["64"] = 6
-	mapa_bsize["128"] = 7
-	mapa_bsize["256"] = 8
-	mapa_bsize["512"] = 9
-	mapa_bsize["1024"] = 10
-	mapa_bsize["2048"] = 11
-	mapa_bsize["4096"] = 12
+	mapa_bsize["128"] = 6
+	mapa_bsize["256"] = 6
+	mapa_bsize["512"] = 6
+	mapa_bsize["1024"] = 6
+	mapa_bsize["2048"] = 6
+	mapa_bsize["4096"] = 6
 
 	valor := mapa_bsize[nMatrizAux]
+
+	fmt.Print(valor)
 
 	return valor
 }

@@ -28,21 +28,21 @@ func main() {
 
 	var algoritmos []algoritmo
 	algoritmos = append(algoritmos, A1_NaivStandard{})
-	// algoritmos = append(algoritmos, A2_NaivOnArray{})
-	// algoritmos = append(algoritmos, A3_NaivKahan{})
-	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
-	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
-	// algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
-	// algoritmos = append(algoritmos, A7_WinogradOriginal{})
-	// algoritmos = append(algoritmos, A8_WinogradScaled{})
-	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
-	// algoritmos = append(algoritmos, A10_StrassenWinograd{})
-	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
-	algoritmos = append(algoritmos, A12_III_4ParallelBlock{}) //hay que revisarlo
+	algoritmos = append(algoritmos, A2_NaivOnArray{})
+	algoritmos = append(algoritmos, A3_NaivKahan{})
+	algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
+	algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
+	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
+	algoritmos = append(algoritmos, A7_WinogradOriginal{})
+	algoritmos = append(algoritmos, A8_WinogradScaled{})
+	algoritmos = append(algoritmos, A9_StrassenNaiv{})
+	algoritmos = append(algoritmos, A10_StrassenWinograd{})
+	algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
+	algoritmos = append(algoritmos, A12_III_4ParallelBlock{})
 
-	//enviarDatosAlServidor(algoritmos)
+	enviarDatosAlServidor(algoritmos)
 
-	probarALgoritmo(algoritmos)
+	//probarALgoritmo(algoritmos)
 
 }
 
@@ -96,7 +96,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var cantidadCasosPrueba = 3
+	var cantidadCasosPrueba = 2
 
 	var tamanoMatrizAleer = 1
 
