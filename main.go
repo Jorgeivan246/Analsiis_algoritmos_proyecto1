@@ -22,13 +22,13 @@ type algoritmo interface {
 	Run(matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) [][]int
 }
 
-var url = "https://script.google.com/macros/s/AKfycbyLDsNS-8C-g1YQyA3p797EdcojUeVu3CX7-xehyzAjJ-IUIllok1BbyiQfSLKIoxOj/exec"
+var url = "https://script.google.com/macros/s/AKfycbyxcN3gH-UONnj56hAUJSpWUTSuov2dYjyl-xN5pO9_qfdPJ0DL5QRQ1SU2ZfpuSID-BA/exec"
 
 func main() {
 
 	var algoritmos []algoritmo
 	algoritmos = append(algoritmos, A1_NaivStandard{})
-	algoritmos = append(algoritmos, A2_NaivOnArray{})
+	// algoritmos = append(algoritmos, A2_NaivOnArray{})
 	// algoritmos = append(algoritmos, A3_NaivKahan{})
 	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
 	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
@@ -37,10 +37,12 @@ func main() {
 	// algoritmos = append(algoritmos, A8_WinogradScaled{})
 	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
 	// algoritmos = append(algoritmos, A10_StrassenWinograd{})
-	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{}) //hay que revisarlo
-	// algoritmos = append(algoritmos, A12_III_4ParallelBlock{})   //hay que revisarlo
+	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
+	algoritmos = append(algoritmos, A12_III_4ParallelBlock{}) //hay que revisarlo
 
-	enviarDatosAlServidor(algoritmos)
+	//enviarDatosAlServidor(algoritmos)
+
+	probarALgoritmo(algoritmos)
 
 }
 
