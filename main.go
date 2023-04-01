@@ -8,20 +8,27 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
+
+	"github.com/shirou/gopsutil/cpu"
 )
 
 type algoritmo interface {
 	Run(matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) [][]int
 }
 
+var url = "https://script.google.com/macros/s/AKfycbyLDsNS-8C-g1YQyA3p797EdcojUeVu3CX7-xehyzAjJ-IUIllok1BbyiQfSLKIoxOj/exec"
+
 func main() {
 
 	var algoritmos []algoritmo
 	algoritmos = append(algoritmos, A1_NaivStandard{})
-	// algoritmos = append(algoritmos, A2_NaivOnArray{})
+	algoritmos = append(algoritmos, A2_NaivOnArray{})
 	// algoritmos = append(algoritmos, A3_NaivKahan{})
 	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
 	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
@@ -29,44 +36,57 @@ func main() {
 	// algoritmos = append(algoritmos, A7_WinogradOriginal{})
 	// algoritmos = append(algoritmos, A8_WinogradScaled{})
 	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
-	algoritmos = append(algoritmos, A10_StrassenWinograd{})
-	algoritmos = append(algoritmos, A11_III_3SequentialBlock{}) //hay que revisarlo
+	// algoritmos = append(algoritmos, A10_StrassenWinograd{})
+	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{}) //hay que revisarlo
 	// algoritmos = append(algoritmos, A12_III_4ParallelBlock{})   //hay que revisarlo
 
-	probarALgoritmo(algoritmos)
+	enviarDatosAlServidor(algoritmos)
+
 }
 
-func probarALgoritmo(algoritmos []algoritmo) {
+func obtenerDatosHardware() (string, string, string) {
 
-	var matriz1 [][]int
+	var info2 syscall.Sysinfo_t
+	err := syscall.Sysinfo(&info2)
+	if err != nil {
+		panic(err)
+	}
+	var memoria = info2.Totalram / 1024 / 1024 / 1024
 
-	var matriz2 [][]int
+	var cantidadHIlos = runtime.NumCPU()
 
-	var matriz3 [][]int
+	var nHilos = strconv.Itoa(cantidadHIlos)
 
-	var tamanoMatrizAleer = 1
+	var modeloProcesador = ""
 
-	var tamanoMatriz2 = 0
+	var memoriaRam string = strconv.FormatUint(memoria, 12) + "GB"
 
-	matriz3, matriz2, matriz1, tamanoMatriz2 = inicializarMatrizTamanoIgual(tamanoMatrizAleer, matriz1, matriz2, matriz3)
-	// enviarDatosAlServidor(algoritmos)
-
-	for _, algoritmo := range algoritmos {
-
-		matriz3 = algoritmo.Run(matriz1, matriz2, matriz3)
-		imprimirMatriz(matriz3)
+	info, err := cpu.Info()
+	if err != nil {
+		panic(err)
 	}
 
-	tamanoMatriz2 = tamanoMatriz2 + 1
+	if len(info) > 0 {
+		modeloProcesador = info[0].ModelName
+
+		modeloProcesador = regexp.MustCompile(`\s+`).ReplaceAllString(modeloProcesador, "")
+		fmt.Println(modeloProcesador)
+	} else {
+		modeloProcesador = "No se pudo obtener información del procesador"
+	}
+
+	return modeloProcesador, nHilos, memoriaRam
 }
 
 func enviarDatosAlServidor(algoritmos []algoritmo) {
 
-	url := "https://script.google.com/macros/s/AKfycbxODvkzedb9yE9Unwtj6sf6x0AS27mB2Mt3UHMKLABoIsCX3KxW-v7pa0-F_3sSF5UZmw/exec"
-
 	var tiempo float64 = 0.00000000
 
-	var idAlgoritmo = 4
+	var urlAux string
+
+	var idAlgoritmo = 3
+
+	var columna = 4
 
 	var matriz1 [][]int
 
@@ -74,13 +94,28 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var cantidadCasosPrueba = 8
+	var cantidadCasosPrueba = 3
 
 	var tamanoMatrizAleer = 1
 
 	var tamanoMatriz2 = 0
 
-	var columna = 4
+	var modeloProcesador, nHilos, memoriaRam = obtenerDatosHardware()
+
+	url_hardware := url + "?" + "idAlgo=" + strconv.Itoa(idAlgoritmo) + "&" + "columna=" + strconv.Itoa(columna) + "&" + "nombreProcesador=" + modeloProcesador + "&" + "nHilos=" + nHilos + "&" + "memoriaRam=" + memoriaRam
+
+	fmt.Println(url_hardware)
+	resp, err := http.Get(url_hardware)
+	if err != nil {
+		fmt.Println("Error al enviar solicitud:", err)
+		return
+	}
+
+	defer resp.Body.Close()
+
+	idAlgoritmo = idAlgoritmo + 8
+
+	columna = columna + 1
 
 	for _, algoritmo := range algoritmos {
 		fmt.Println("\nAlgoritmo: ")
@@ -108,11 +143,11 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 			fmt.Println(idAlgoritmo, columna)
 
-			url = url + "?" + "idAlgo=" + strconv.Itoa(idAlgoritmo) + "&" + "columna=" + strconv.Itoa(columna) + "&" + "tamanoMatriz=" + strconv.Itoa(tamanoMatriz2) + "&" + "tiempo=" + tiempo2
+			urlAux = url + "?" + "idAlgo=" + strconv.Itoa(idAlgoritmo) + "&" + "columna=" + strconv.Itoa(columna) + "&" + "tamanoMatriz=" + strconv.Itoa(tamanoMatriz2) + "&" + "tiempo=" + tiempo2
 
-			fmt.Println(url)
+			fmt.Println(urlAux)
 
-			resp, err := http.Get(url)
+			resp, err := http.Get(urlAux)
 			if err != nil {
 				fmt.Println("Error al enviar solicitud:", err)
 				return
@@ -125,13 +160,37 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 			columna = columna + 2
 
-			url = "https://script.google.com/macros/s/AKfycbxODvkzedb9yE9Unwtj6sf6x0AS27mB2Mt3UHMKLABoIsCX3KxW-v7pa0-F_3sSF5UZmw/exec"
+			urlAux = url
 		}
 
 		idAlgoritmo = idAlgoritmo + 1
-		columna = 4
+		columna = 5
 	}
 
+}
+
+func probarALgoritmo(algoritmos []algoritmo) {
+
+	var matriz1 [][]int
+
+	var matriz2 [][]int
+
+	var matriz3 [][]int
+
+	var tamanoMatrizAleer = 1
+
+	var tamanoMatriz2 = 0
+
+	matriz3, matriz2, matriz1, tamanoMatriz2 = inicializarMatrizTamanoIgual(tamanoMatrizAleer, matriz1, matriz2, matriz3)
+	// enviarDatosAlServidor(algoritmos)
+
+	for _, algoritmo := range algoritmos {
+
+		matriz3 = algoritmo.Run(matriz1, matriz2, matriz3)
+		imprimirMatriz(matriz3)
+	}
+
+	tamanoMatriz2 = tamanoMatriz2 + 1
 }
 
 func inicializarMatrizTamanoIgual(tamanoMatriz int, matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) ([][]int, [][]int, [][]int, int) {
