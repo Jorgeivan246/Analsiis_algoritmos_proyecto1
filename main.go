@@ -28,21 +28,22 @@ func main() {
 
 	var algoritmos []algoritmo
 	algoritmos = append(algoritmos, A1_NaivStandard{})
-	// algoritmos = append(algoritmos, A2_NaivOnArray{})
-	// algoritmos = append(algoritmos, A3_NaivKahan{})
-	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
-	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
-	// algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
-	// algoritmos = append(algoritmos, A7_WinogradOriginal{})
-	// algoritmos = append(algoritmos, A8_WinogradScaled{})
-	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
-	// algoritmos = append(algoritmos, A10_StrassenWinograd{})
+	algoritmos = append(algoritmos, A2_NaivOnArray{})
+	algoritmos = append(algoritmos, A3_NaivKahan{})
+	algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
+	algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
+	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
+	algoritmos = append(algoritmos, A7_WinogradOriginal{})
+	algoritmos = append(algoritmos, A8_WinogradScaled{})
+	algoritmos = append(algoritmos, A9_StrassenNaiv{})
+	algoritmos = append(algoritmos, A10_StrassenWinograd{})
 	algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
 	algoritmos = append(algoritmos, A12_III_4ParallelBlock{})
-
-	//enviarDatosAlServidor(algoritmos)
-
-	probarALgoritmo(algoritmos)
+	algoritmos = append(algoritmos, A13_IV_3SequentialBlockstruct{})
+	algoritmos = append(algoritmos, A14_IV_4ParallelBlock{})
+	algoritmos = append(algoritmos, A15_V_3SequentialBlock{})
+	algoritmos = append(algoritmos, A16_V_4ParallelBlock{})
+	enviarDatosAlServidor(algoritmos)
 
 }
 
@@ -107,7 +108,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var cantidadCasosPrueba = 2
+	var cantidadCasosPrueba = 12
 
 	var tamanoMatrizAleer = 1
 
@@ -213,7 +214,6 @@ func probarALgoritmo(algoritmos []algoritmo) {
 }
 
 func inicializarMatrizTamanoIgual(tamanoMatriz int, matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) ([][]int, [][]int, [][]int, int) {
-
 	tamano := float64(math.Pow(2, float64(tamanoMatriz)))
 
 	tamanoEntero := int(tamano)
@@ -229,6 +229,13 @@ func inicializarMatrizTamanoIgual(tamanoMatriz int, matriz1 [][]int, matriz2 [][
 		matriz2[i] = make([]int, len(matriz1[i]))
 		copy(matriz2[i], matriz1[i])
 	}
+
+	matriz3 = make([][]int, len(matriz1))
+
+	for i := range matriz3 {
+		matriz3[i] = make([]int, len(matriz2[0]))
+	}
+	tamanoMatriz = tamanoMatriz + 1
 
 	return matriz3, matriz2, matriz1, tamanoEntero
 }
