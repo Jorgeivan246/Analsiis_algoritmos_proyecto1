@@ -1,18 +1,21 @@
 package main
 
+import "sync"
+
 type A16_V_4ParallelBlock struct {
 }
 
 func (s A16_V_4ParallelBlock) V_4ParallelBlock(A [][]int, B [][]int, C [][]int) [][]int {
 
-	var bsize = obtenerLongitudBsize(A)
-
-	var size = len(A)
+	size := len(A)
+	bsize := obtenerLongitudBsize(A)
+	var wg sync.WaitGroup
 
 	for i1 := 0; i1 < size; i1 += bsize {
 		for j1 := 0; j1 < size; j1 += bsize {
 			for k1 := 0; k1 < size; k1 += bsize {
 				// Use goroutine to execute each block in parallel
+				wg.Add(1)
 				go func(i1, j1, k1 int) {
 					for i := i1; i < i1+bsize && i < size; i++ {
 						for j := j1; j < j1+bsize && j < size; j++ {
