@@ -18,13 +18,15 @@ func (s A11_III_3SequentialBlock) sequentialBlock(A [][]int, B [][]int, C [][]in
 
 	var bsize = obtenerLongitudBsize(A)
 
-	for i1 := 0; i1 < len(A); i1 += bsize {
-		for j1 := 0; j1 < len(B); j1 += bsize {
-			for k1 := 0; k1 < len(A); k1 += bsize {
-				for i := i1; i < i1+bsize && i < len(A); i++ {
-					for j := j1; j < j1+bsize && j < len(A); j++ {
-						for k := k1; k < k1+bsize && k < len(A); k++ {
-							A[i][j] += B[i][k] * C[k][j]
+	var size = len(A)
+
+	for i1 := 0; i1 < size; i1 += bsize {
+		for j1 := 0; j1 < size; j1 += bsize {
+			for k1 := 0; k1 < size; k1 += bsize {
+				for i := i1; i < i1+bsize && i < size; i++ {
+					for j := j1; j < j1+bsize && j < size; j++ {
+						for k := k1; k < k1+bsize && k < size; k++ {
+							C[i][j] += A[i][k] * B[k][j]
 						}
 					}
 				}

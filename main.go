@@ -28,31 +28,42 @@ func main() {
 
 	var algoritmos []algoritmo
 	algoritmos = append(algoritmos, A1_NaivStandard{})
-	algoritmos = append(algoritmos, A2_NaivOnArray{})
-	algoritmos = append(algoritmos, A3_NaivKahan{})
-	algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
-	algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
-	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
-	algoritmos = append(algoritmos, A7_WinogradOriginal{})
-	algoritmos = append(algoritmos, A8_WinogradScaled{})
-	algoritmos = append(algoritmos, A9_StrassenNaiv{})
-	algoritmos = append(algoritmos, A10_StrassenWinograd{})
+	// algoritmos = append(algoritmos, A2_NaivOnArray{})
+	// algoritmos = append(algoritmos, A3_NaivKahan{})
+	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
+	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
+	// algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
+	// algoritmos = append(algoritmos, A7_WinogradOriginal{})
+	// algoritmos = append(algoritmos, A8_WinogradScaled{})
+	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
+	// algoritmos = append(algoritmos, A10_StrassenWinograd{})
 	algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
 	algoritmos = append(algoritmos, A12_III_4ParallelBlock{})
 
-	enviarDatosAlServidor(algoritmos)
+	//enviarDatosAlServidor(algoritmos)
 
-	//probarALgoritmo(algoritmos)
+	probarALgoritmo(algoritmos)
 
 }
 
 func obtenerDatosHardware() (string, string, string) {
 
 	var info2 syscall.Sysinfo_t
-	err := syscall.Sysinfo(&info2)
-	if err != nil {
-		panic(err)
-	}
+
+	//Obtener datos en windows
+
+	// info2, err := mem.VirtualMemory()
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// err := syscall.Sysinfo(&info2)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// var memoria = info2.Total / 1024 / 1024 / 1024
+
 	var memoria = info2.Totalram / 1024 / 1024 / 1024
 
 	var cantidadHIlos = runtime.NumCPU()
@@ -184,12 +195,18 @@ func probarALgoritmo(algoritmos []algoritmo) {
 	var tamanoMatriz2 = 0
 
 	matriz3, matriz2, matriz1, tamanoMatriz2 = inicializarMatrizTamanoIgual(tamanoMatrizAleer, matriz1, matriz2, matriz3)
-	// enviarDatosAlServidor(algoritmos)
+
+	matriz3 = make([][]int, len(matriz1))
+
+	for i := range matriz3 {
+		matriz3[i] = make([]int, len(matriz1[i]))
+
+	}
 
 	for _, algoritmo := range algoritmos {
 
 		matriz3 = algoritmo.Run(matriz1, matriz2, matriz3)
-		imprimirMatriz(matriz3)
+		// imprimirMatriz(matriz3)
 	}
 
 	tamanoMatriz2 = tamanoMatriz2 + 1
@@ -212,13 +229,6 @@ func inicializarMatrizTamanoIgual(tamanoMatriz int, matriz1 [][]int, matriz2 [][
 		matriz2[i] = make([]int, len(matriz1[i]))
 		copy(matriz2[i], matriz1[i])
 	}
-
-	matriz3 = make([][]int, len(matriz1))
-
-	for i := range matriz3 {
-		matriz3[i] = make([]int, len(matriz2[0]))
-	}
-	tamanoMatriz = tamanoMatriz + 1
 
 	return matriz3, matriz2, matriz1, tamanoEntero
 }
