@@ -41,8 +41,8 @@ func (a A7_WinogradOriginal) winogradOriginal(matriz1 [][]int, matriz2 [][]int, 
 			}
 		}
 	} else {
-		for i := m; i < m; i++ {
-			for k := n; k < n; k++ {
+		for i := 0; i < m; i++ {
+			for k := 0; k < n; k++ {
 				aux = 0
 				for j := 0; j < gamma; j += 2 {
 					aux += (matriz1[i][j] + matriz2[j+1][k]) * (matriz1[i][j+1] + matriz2[j][k])

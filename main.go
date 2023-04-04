@@ -12,10 +12,12 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
-	"syscall"
+
+	// "syscall"
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/mem"
 )
 
 type algoritmo interface {
@@ -27,45 +29,46 @@ var url = "https://script.google.com/macros/s/AKfycbyxcN3gH-UONnj56hAUJSpWUTSuov
 func main() {
 
 	var algoritmos []algoritmo
-	algoritmos = append(algoritmos, A1_NaivStandard{})
-	algoritmos = append(algoritmos, A2_NaivOnArray{})
-	algoritmos = append(algoritmos, A3_NaivKahan{})
-	algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
-	algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
-	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
+	// algoritmos = append(algoritmos, A1_NaivStandard{})
+	// algoritmos = append(algoritmos, A2_NaivOnArray{})
+	// algoritmos = append(algoritmos, A3_NaivKahan{})
+	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
+	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
+	// algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
 	algoritmos = append(algoritmos, A7_WinogradOriginal{})
 	algoritmos = append(algoritmos, A8_WinogradScaled{})
-	algoritmos = append(algoritmos, A9_StrassenNaiv{})
-	algoritmos = append(algoritmos, A10_StrassenWinograd{})
-	algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
-	algoritmos = append(algoritmos, A12_III_4ParallelBlock{})
-	algoritmos = append(algoritmos, A13_IV_3SequentialBlockstruct{})
-	algoritmos = append(algoritmos, A14_IV_4ParallelBlock{})
-	algoritmos = append(algoritmos, A15_V_3SequentialBlock{})
-	algoritmos = append(algoritmos, A16_V_4ParallelBlock{})
-	enviarDatosAlServidor(algoritmos)
+	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
+	// algoritmos = append(algoritmos, A10_StrassenWinograd{})
+	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
+	// algoritmos = append(algoritmos, A12_III_4ParallelBlock{})
+	// algoritmos = append(algoritmos, A13_IV_3SequentialBlockstruct{})
+	// algoritmos = append(algoritmos, A14_IV_4ParallelBlock{})
+	// algoritmos = append(algoritmos, A15_V_3SequentialBlock{})
+	// algoritmos = append(algoritmos, A16_V_4ParallelBlock{})
+	//enviarDatosAlServidor(algoritmos)
+	probarALgoritmo(algoritmos)
 
 }
 
 func obtenerDatosHardware() (string, string, string) {
 
-	var info2 syscall.Sysinfo_t
+	// var info2 syscall.Sysinfo_t
 
 	//Obtener datos en windows
 
-	// info2, err := mem.VirtualMemory()
-	// if err != nil {
-	// 	panic(err)
-	// }
+	info2, err := mem.VirtualMemory()
+	if err != nil {
+		panic(err)
+	}
 
 	// err := syscall.Sysinfo(&info2)
 	// if err != nil {
 	// 	panic(err)
 	// }
 
-	// var memoria = info2.Total / 1024 / 1024 / 1024
+	var memoria = info2.Total / 1024 / 1024 / 1024
 
-	var memoria = info2.Totalram / 1024 / 1024 / 1024
+	// var memoria = info2.Totalram / 1024 / 1024 / 1024
 
 	var cantidadHIlos = runtime.NumCPU()
 
@@ -191,11 +194,17 @@ func probarALgoritmo(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var tamanoMatrizAleer = 1
+	var tamanoMatrizAleer = 4
 
-	var tamanoMatriz2 = 0
+	tamano := float64(math.Pow(2, float64(tamanoMatrizAleer)))
 
-	matriz3, matriz2, matriz1, tamanoMatriz2 = inicializarMatrizTamanoIgual(tamanoMatrizAleer, matriz1, matriz2, matriz3)
+	tamanoEntero := int(tamano)
+
+	nommbreMatriz := "matriz" + strconv.Itoa(tamanoEntero) + ".txt"
+
+	matriz1 = readMatrix(nommbreMatriz)
+
+	matriz2 = readMatrix(nommbreMatriz)
 
 	matriz3 = make([][]int, len(matriz1))
 
@@ -207,10 +216,10 @@ func probarALgoritmo(algoritmos []algoritmo) {
 	for _, algoritmo := range algoritmos {
 
 		matriz3 = algoritmo.Run(matriz1, matriz2, matriz3)
-		// imprimirMatriz(matriz3)
+		imprimirMatriz(matriz3)
+
 	}
 
-	tamanoMatriz2 = tamanoMatriz2 + 1
 }
 
 func inicializarMatrizTamanoIgual(tamanoMatriz int, matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) ([][]int, [][]int, [][]int, int) {

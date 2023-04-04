@@ -12,7 +12,7 @@ func (s A9_StrassenNaiv) StrassenNaiv(a [][]int, b [][]int) [][]int {
 	}
 
 	if size == 1 {
-		return [][]int{{a[0][0] * b[0][0]}}
+		return A1_NaivStandard{}.NaivStandard(a, b, resultado)
 	} else {
 		// Divide las matrices en bloques más pequeños
 		m := size / 2
