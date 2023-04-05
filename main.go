@@ -16,6 +16,8 @@ import (
 	// "syscall"
 	"time"
 
+	"os/exec"
+
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/mem"
 )
@@ -30,24 +32,37 @@ func main() {
 
 	var algoritmos []algoritmo
 	algoritmos = append(algoritmos, A1_NaivStandard{})
-	// algoritmos = append(algoritmos, A2_NaivOnArray{})
-	// algoritmos = append(algoritmos, A3_NaivKahan{})
-	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
-	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
-	// algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
-	// algoritmos = append(algoritmos, A7_WinogradOriginal{})
-	// algoritmos = append(algoritmos, A8_WinogradScaled{})
-	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
-	// algoritmos = append(algoritmos, A10_StrassenWinograd{})
+	algoritmos = append(algoritmos, A2_NaivOnArray{})
+	algoritmos = append(algoritmos, A3_NaivKahan{})
+	algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
+	algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
+	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
+	algoritmos = append(algoritmos, A7_WinogradOriginal{})
+	algoritmos = append(algoritmos, A8_WinogradScaled{})
+	algoritmos = append(algoritmos, A9_StrassenNaiv{})
+	algoritmos = append(algoritmos, A10_StrassenWinograd{})
 	algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
 	algoritmos = append(algoritmos, A12_III_4ParallelBlock{})
 	algoritmos = append(algoritmos, A13_IV_3SequentialBlockstruct{})
 	algoritmos = append(algoritmos, A14_IV_4ParallelBlock{})
 	algoritmos = append(algoritmos, A15_V_3SequentialBlock{})
 	algoritmos = append(algoritmos, A16_V_4ParallelBlock{})
+
 	//	enviarDatosAlServidor(algoritmos)
 	// probarALgoritmo(algoritmos)
 
+	ejecutar_script_graficas()
+
+}
+
+func ejecutar_script_graficas() {
+	cmd := exec.Command("python", "generar_graficos.py")
+	output, err := cmd.Output()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(string(output))
 }
 
 func obtenerDatosHardware() (string, string, string) {
