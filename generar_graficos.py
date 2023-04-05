@@ -6,8 +6,7 @@ import numpy as np
 from fpdf import FPDF
 from matplotlib.backends.backend_pdf import PdfPages
 import statistics
-def main():
-    print("It works")
+
 
 
 """
@@ -89,14 +88,12 @@ def generar_grafico_barras_promedio_tiempo_algoritmos(tiempo_ejecucion):
 
 
     plt.barh(etiquetas_metodos, tiempo_ejecucion)
-
     plt.xlabel('Tiempo en segundos')
     plt.ylabel('Algoritmos')
     plt.title('Tiempo de ejecucion por algoritmo')
- 
+    plt.gcf().set_size_inches(10.4, 8.4)
     plt.savefig('graficos/grafico_tiempos_promedio_algoritmos.png')
-
-
+    plt.clf()  
 
 """
 Esta funcion genera un grafico de barras con los tiempos de ejecucion de cada algoritmo
@@ -116,18 +113,14 @@ def generar_grafico_barras_promedio_tiempo_algoritmos_ascendente(tiempo_ejecucio
     claves = list(diccionario_ordenado.keys())
     valores = list(diccionario_ordenado.values())
 
-    
+
 
     plt.barh(claves, valores)
  
     plt.xlabel('Tiempo en segundos')
     plt.ylabel('Algoritmos')
     plt.title('Tiempo de ejecucion por algoritmo')
-    plt.figure(figsize=(13.4,11.8))
     plt.savefig('graficos/grafico_tiempos_promedio_algoritmos_ordenados.png')
-       
-
-    
 
 
 """
@@ -160,7 +153,6 @@ def obtener_datos_en_tabla(df):
                 
             if (i % 2 == 0):      
 
-      
                
                 try:
                     elemento = elemento.replace(",", ".")
@@ -217,18 +209,18 @@ def armar_tabla(df):
 
     nombres_medidas_tendencia_central=["Nombre","Media","Rango","Desviacion estandar","Varianza"]
     etiquetas_metodos = ["NaivStandard", "NaivOnArray", "NaivKahan", "NaivLoopUnrollingTwo", "NaivLoopUnrollingThree", "NaivLoopUnrollingFour", "WinogradOriginal", "WinogradScaled", "StrassenNaiv", "StrassenWinograd", "III.3 Sequential block", "III.4 Parallel Block", "IV.3 Sequential block", "IV.4 Parallel Block", "V.3 Sequential block", "V.4 Parallel Block"]
-    df.insert(0, '-1', etiquetas_metodos)
+    df.insert(0, '0', etiquetas_metodos)
     df.loc[-1] = nombres_medidas_tendencia_central
     df.index = df.index + 1
     df = df.sort_index()
-    df.rename(columns={col:'' for col in df.columns}, inplace=True)
+
     return df
  
     
 
 
 """
-Esta funcion graficas los timepo de ejecucion dado un tamaño de cada algoritmo
+Esta funcion graficas los ttiempos de ejecucion de cada uno de los algoritmos respecto a su tamaño
 """
 def generar_graficas(df):
     etiquetas_metodos = ["NaivStandard", "NaivOnArray", "NaivKahan", "NaivLoopUnrollingTwo", "NaivLoopUnrollingThree", "NaivLoopUnrollingFour", "WinogradOriginal", "WinogradScaled", "StrassenNaiv", "StrassenWinograd", "III.3 Sequential block", "III.4 Parallel Block", "IV.3 Sequential block", "IV.4 Parallel Block", "V.3 Sequential block", "V.4 Parallel Block"]
@@ -264,7 +256,6 @@ def generar_graficas(df):
 
 
 
-
 if __name__ == "__main__":
     df=leer_hoja_calculo()
 
@@ -276,17 +267,15 @@ if __name__ == "__main__":
 
     dfn = pd.DataFrame(datos_todos_los_algoritmos)
 
-
     tiempo_ejecucion=obtenerPromedioEjecucionAlgoritmos(dfn)
     tiempo_2 = tiempo_ejecucion.copy()
     generar_grafico_barras_promedio_tiempo_algoritmos(tiempo_ejecucion)
     
     generar_grafico_barras_promedio_tiempo_algoritmos_ascendente(tiempo_2)
 
+
     #Se llama a la funcion que genera las graficas 
     generar_graficas(dfn)
-
-
 
 
 
