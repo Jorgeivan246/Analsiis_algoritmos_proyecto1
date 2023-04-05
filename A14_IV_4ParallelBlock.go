@@ -5,6 +5,11 @@ import "sync"
 type A14_IV_4ParallelBlock struct {
 }
 
+/*
+Metodo igual que el anterior que agrega una go rutina cada vez que
+Va a iterar sobre un bloque
+*/
+
 func (s A14_IV_4ParallelBlock) ParallelBlock(A [][]int, B [][]int, C [][]int) [][]int {
 
 	size := len(A)

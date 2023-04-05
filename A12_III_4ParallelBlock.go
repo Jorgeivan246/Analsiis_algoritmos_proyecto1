@@ -10,6 +10,9 @@ type A12_III_4ParallelBlock struct {
 
 # Esta funcion aplica el metodo Parallel Block numero 12
 
+Metodo igual que el anterior que agrega una go rutina cada vez que
+Va a iterar sobre un bloque
+
 *
 */
 func (p A12_III_4ParallelBlock) A12_III_4ParallelBlock(A [][]int, B [][]int, C [][]int) [][]int {
@@ -20,7 +23,8 @@ func (p A12_III_4ParallelBlock) A12_III_4ParallelBlock(A [][]int, B [][]int, C [
 	for i1 := 0; i1 < size; i1 += bsize {
 		for j1 := 0; j1 < size; j1 += bsize {
 			for k1 := 0; k1 < size; k1 += bsize {
-
+				//No es necesario , calcular cuantas go rutinas se necesitan , ellas se crean cada
+				//que es necesario
 				wg.Add(1)
 				go func(i1, j1, k1 int) {
 
