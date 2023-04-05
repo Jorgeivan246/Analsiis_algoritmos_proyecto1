@@ -19,7 +19,8 @@ func (s A14_IV_4ParallelBlock) ParallelBlock(A [][]int, B [][]int, C [][]int) []
 	for i1 := 0; i1 < size; i1 += bsize {
 		for j1 := 0; j1 < size; j1 += bsize {
 			for k1 := 0; k1 < size; k1 += bsize {
-
+				//No es necesario , calcular cuantas go rutinas se necesitan , ellas se crean cada
+				//que es necesario
 				wg.Add(1)
 				go func(i1, j1, k1 int) {
 

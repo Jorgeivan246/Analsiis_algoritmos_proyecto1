@@ -93,8 +93,10 @@ def generar_grafico_barras_promedio_tiempo_algoritmos(tiempo_ejecucion):
     plt.xlabel('Tiempo en segundos')
     plt.ylabel('Algoritmos')
     plt.title('Tiempo de ejecucion por algoritmo')
+ 
     plt.savefig('graficos/grafico_tiempos_promedio_algoritmos.png')
-    plt.clf()  
+
+
 
 """
 Esta funcion genera un grafico de barras con los tiempos de ejecucion de cada algoritmo
@@ -114,14 +116,18 @@ def generar_grafico_barras_promedio_tiempo_algoritmos_ascendente(tiempo_ejecucio
     claves = list(diccionario_ordenado.keys())
     valores = list(diccionario_ordenado.values())
 
-
+    
 
     plt.barh(claves, valores)
  
     plt.xlabel('Tiempo en segundos')
     plt.ylabel('Algoritmos')
     plt.title('Tiempo de ejecucion por algoritmo')
+    plt.figure(figsize=(13.4,11.8))
     plt.savefig('graficos/grafico_tiempos_promedio_algoritmos_ordenados.png')
+       
+
+    
 
 
 """
@@ -270,15 +276,17 @@ if __name__ == "__main__":
 
     dfn = pd.DataFrame(datos_todos_los_algoritmos)
 
+
     tiempo_ejecucion=obtenerPromedioEjecucionAlgoritmos(dfn)
     tiempo_2 = tiempo_ejecucion.copy()
     generar_grafico_barras_promedio_tiempo_algoritmos(tiempo_ejecucion)
     
     generar_grafico_barras_promedio_tiempo_algoritmos_ascendente(tiempo_2)
 
-
     #Se llama a la funcion que genera las graficas 
     generar_graficas(dfn)
+
+
 
 
 
