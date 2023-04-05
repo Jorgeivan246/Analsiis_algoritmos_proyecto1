@@ -7,6 +7,16 @@ func (s A9_StrassenNaiv) StrassenNaiv(a [][]int, b [][]int) [][]int {
 	size := len(a)
 	resultado := make([][]int, size)
 
+	aAux := make([][]int, size)
+	bAux := make([][]int, size)
+
+	for i := range aAux {
+		aAux[i] = make([]int, size)
+		copy(aAux[i], a[i])
+		bAux[i] = make([]int, size)
+		copy(bAux[i], b[i])
+	}
+
 	for i := range resultado {
 		resultado[i] = make([]int, size)
 	}
@@ -27,15 +37,15 @@ func (s A9_StrassenNaiv) StrassenNaiv(a [][]int, b [][]int) [][]int {
 		b22 := make([][]int, m)
 
 		for i := 0; i < m; i++ {
-			a11[i] = a[i][:m]
-			a12[i] = a[i][m:]
-			a21[i] = a[m+i][:m]
-			a22[i] = a[m+i][m:]
+			a11[i] = aAux[i][:m]
+			a12[i] = aAux[i][m:]
+			a21[i] = aAux[m+i][:m]
+			a22[i] = aAux[m+i][m:]
 
-			b11[i] = b[i][:m]
-			b12[i] = b[i][m:]
-			b21[i] = b[m+i][:m]
-			b22[i] = b[m+i][m:]
+			b11[i] = bAux[i][:m]
+			b12[i] = bAux[i][m:]
+			b21[i] = bAux[m+i][:m]
+			b22[i] = bAux[m+i][m:]
 		}
 
 		// Realiza las operaciones del algoritmo de Strassen

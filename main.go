@@ -29,24 +29,24 @@ var url = "https://script.google.com/macros/s/AKfycbyxcN3gH-UONnj56hAUJSpWUTSuov
 func main() {
 
 	var algoritmos []algoritmo
-	// algoritmos = append(algoritmos, A1_NaivStandard{})
-	// algoritmos = append(algoritmos, A2_NaivOnArray{})
-	// algoritmos = append(algoritmos, A3_NaivKahan{})
-	// algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
-	// algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
-	// algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
+	algoritmos = append(algoritmos, A1_NaivStandard{})
+	algoritmos = append(algoritmos, A2_NaivOnArray{})
+	algoritmos = append(algoritmos, A3_NaivKahan{})
+	algoritmos = append(algoritmos, A4_NaivLoopUnrollingTwo{})
+	algoritmos = append(algoritmos, A5_NaivLoopUnrollingThree{})
+	algoritmos = append(algoritmos, A6_NaivLoopUnrollingFour{})
 	algoritmos = append(algoritmos, A7_WinogradOriginal{})
 	algoritmos = append(algoritmos, A8_WinogradScaled{})
-	// algoritmos = append(algoritmos, A9_StrassenNaiv{})
-	// algoritmos = append(algoritmos, A10_StrassenWinograd{})
-	// algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
-	// algoritmos = append(algoritmos, A12_III_4ParallelBlock{})
-	// algoritmos = append(algoritmos, A13_IV_3SequentialBlockstruct{})
-	// algoritmos = append(algoritmos, A14_IV_4ParallelBlock{})
-	// algoritmos = append(algoritmos, A15_V_3SequentialBlock{})
-	// algoritmos = append(algoritmos, A16_V_4ParallelBlock{})
-	//enviarDatosAlServidor(algoritmos)
-	probarALgoritmo(algoritmos)
+	algoritmos = append(algoritmos, A9_StrassenNaiv{})
+	algoritmos = append(algoritmos, A10_StrassenWinograd{})
+	algoritmos = append(algoritmos, A11_III_3SequentialBlock{})
+	algoritmos = append(algoritmos, A12_III_4ParallelBlock{})
+	algoritmos = append(algoritmos, A13_IV_3SequentialBlockstruct{})
+	algoritmos = append(algoritmos, A14_IV_4ParallelBlock{})
+	algoritmos = append(algoritmos, A15_V_3SequentialBlock{})
+	algoritmos = append(algoritmos, A16_V_4ParallelBlock{})
+	enviarDatosAlServidor(algoritmos)
+	// probarALgoritmo(algoritmos)
 
 }
 
@@ -97,7 +97,7 @@ func obtenerDatosHardware() (string, string, string) {
 
 func enviarDatosAlServidor(algoritmos []algoritmo) {
 
-	var tiempo float64 = 0.00000000
+	var tiempo float64 = 0.0000000000000
 
 	var urlAux string
 
@@ -154,7 +154,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 			tiempo = elapsedSeconds
 
-			tiempo2 := strconv.FormatFloat(tiempo, 'f', 8, 64)
+			tiempo2 := strconv.FormatFloat(tiempo, 'f', 13, 64)
 
 			fmt.Println(tiempo2)
 
@@ -194,7 +194,7 @@ func probarALgoritmo(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var tamanoMatrizAleer = 4
+	var tamanoMatrizAleer = 1
 
 	tamano := float64(math.Pow(2, float64(tamanoMatrizAleer)))
 
