@@ -12,10 +12,12 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
-	"syscall"
+
+	// "syscall"
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/mem"
 )
 
 type algoritmo interface {
@@ -43,29 +45,30 @@ func main() {
 	algoritmos = append(algoritmos, A14_IV_4ParallelBlock{})
 	algoritmos = append(algoritmos, A15_V_3SequentialBlock{})
 	algoritmos = append(algoritmos, A16_V_4ParallelBlock{})
-	probarALgoritmo(algoritmos)
+	//	enviarDatosAlServidor(algoritmos)
+	// probarALgoritmo(algoritmos)
 
 }
 
 func obtenerDatosHardware() (string, string, string) {
 
-	var info2 syscall.Sysinfo_t
+	// var info2 syscall.Sysinfo_t
 
 	//Obtener datos en windows
 
-	// info2, err := mem.VirtualMemory()
-	// if err != nil {
-	// 	panic(err)
-	// }
+	info2, err := mem.VirtualMemory()
+	if err != nil {
+		panic(err)
+	}
 
 	// err := syscall.Sysinfo(&info2)
 	// if err != nil {
 	// 	panic(err)
 	// }
 
-	// var memoria = info2.Total / 1024 / 1024 / 1024
+	var memoria = info2.Total / 1024 / 1024 / 1024
 
-	var memoria = info2.Totalram / 1024 / 1024 / 1024
+	// var memoria = info2.Totalram / 1024 / 1024 / 1024
 
 	var cantidadHIlos = runtime.NumCPU()
 
@@ -94,7 +97,7 @@ func obtenerDatosHardware() (string, string, string) {
 
 func enviarDatosAlServidor(algoritmos []algoritmo) {
 
-	var tiempo float64 = 0.00000000
+	var tiempo float64 = 0.0000000000000
 
 	var urlAux string
 
@@ -151,7 +154,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 			tiempo = elapsedSeconds
 
-			tiempo2 := strconv.FormatFloat(tiempo, 'f', 8, 64)
+			tiempo2 := strconv.FormatFloat(tiempo, 'f', 13, 64)
 
 			fmt.Println(tiempo2)
 

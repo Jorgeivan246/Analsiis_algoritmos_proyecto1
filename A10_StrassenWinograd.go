@@ -3,7 +3,7 @@ package main
 type A10_StrassenWinograd struct {
 }
 
-func (s A10_StrassenWinograd) StrassenWinograd(a [][] int, b [][]int) [][]int {
+func (s A10_StrassenWinograd) StrassenWinograd(a [][]int, b [][]int) [][]int {
 	n := len(a)
 
 	// Caso base
@@ -14,10 +14,20 @@ func (s A10_StrassenWinograd) StrassenWinograd(a [][] int, b [][]int) [][]int {
 		return c
 	}
 
+	aAux := make([][]int, n)
+	bAux := make([][]int, n)
+
+	for i := range aAux {
+		aAux[i] = make([]int, n)
+		copy(aAux[i], a[i])
+		bAux[i] = make([]int, n)
+		copy(bAux[i], b[i])
+	}
+
 	// Dividir las matrices en submatrices más pequeñas
 	half := n / 2
-	a11, a12, a21, a22 := s.divideMatrix(a, half)
-	b11, b12, b21, b22 := s.divideMatrix(b, half)
+	a11, a12, a21, a22 := s.divideMatrix(aAux, half)
+	b11, b12, b21, b22 := s.divideMatrix(bAux, half)
 
 	// Calcular las submatrices recursivamente
 	p1 := s.StrassenWinograd(s.SumarMatrices(a11, a22), s.SumarMatrices(b11, b22))
@@ -52,7 +62,7 @@ func (s A10_StrassenWinograd) StrassenWinograd(a [][] int, b [][]int) [][]int {
 /*
 Esta funcion es auxiliar del metodo strassenWinograd numero 10
 */
-func (s A10_StrassenWinograd) SumarMatrices(a [][] int, b [][]int) [][]int {
+func (s A10_StrassenWinograd) SumarMatrices(a [][]int, b [][]int) [][]int {
 	n := len(a)
 	c := make([][]int, n)
 	for i := 0; i < n; i++ {
@@ -67,7 +77,7 @@ func (s A10_StrassenWinograd) SumarMatrices(a [][] int, b [][]int) [][]int {
 /*
 Esta funcion es auxiliar del metodo strassenWinograd numero 10
 */
-func (s A10_StrassenWinograd) RestarMatrices(a [][] int, b [][]int) [][]int {
+func (s A10_StrassenWinograd) RestarMatrices(a [][]int, b [][]int) [][]int {
 	n := len(a)
 	c := make([][]int, n)
 	for i := 0; i < n; i++ {
@@ -103,6 +113,6 @@ func (s A10_StrassenWinograd) divideMatrix(m [][]int, half int) ([][]int, [][]in
 	return a, b, c, d
 }
 
-func (s A10_StrassenWinograd) Run(a [][]int, b [][]int, matriz3 [][] int) [][]int {
+func (s A10_StrassenWinograd) Run(a [][]int, b [][]int, matriz3 [][]int) [][]int {
 	return s.StrassenWinograd(a, b)
 }

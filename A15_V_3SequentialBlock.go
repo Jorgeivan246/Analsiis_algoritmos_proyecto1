@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type A15_V_3SequentialBlock struct {
 }
 
@@ -15,6 +17,7 @@ func (s A15_V_3SequentialBlock) V_3SequentialBlock(A [][]int, B [][]int, C [][]i
 				for i := i1; i < i1+bsize && i < size; i++ {
 					for j := j1; j < j1+bsize && j < size; j++ {
 						for k := k1; k < k1+bsize && k < size; k++ {
+							fmt.Println("i: ", i, "j: ", j, "k: ", k)
 							C[k][i] += A[k][j] * B[j][i]
 						}
 					}
