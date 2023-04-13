@@ -5,6 +5,13 @@ type A1_NaivStandard struct {
 
 func (a A1_NaivStandard) NaivStandard(matriz1 [][]int, matriz2 [][]int, matriz3 [][]int) [][]int {
 
+	if matriz3 == nil {
+		matriz3 = make([][]int, len(matriz1))
+		for i := range matriz3 {
+			matriz3[i] = make([]int, len(matriz1[i]))
+		}
+	}
+
 	for i := 0; i < len(matriz1); i++ {
 		for j := 0; j < len(matriz2[0]); j++ {
 			for k := 0; k < len(matriz1[0]); k++ {

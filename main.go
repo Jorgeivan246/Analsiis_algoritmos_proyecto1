@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"runtime"
 	"strconv"
@@ -209,7 +210,9 @@ func probarALgoritmo(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var tamanoMatrizAleer = 1
+	var matriz4 [][]int
+
+	var tamanoMatrizAleer = 10
 
 	tamano := float64(math.Pow(2, float64(tamanoMatrizAleer)))
 
@@ -223,17 +226,28 @@ func probarALgoritmo(algoritmos []algoritmo) {
 
 	matriz3 = make([][]int, len(matriz1))
 
+	matriz4 = make([][]int, len(matriz1))
+
 	for i := range matriz3 {
+		matriz4[i] = make([]int, len(matriz1[i]))
 		matriz3[i] = make([]int, len(matriz1[i]))
 
 	}
 
+	matriz4 = A1_NaivStandard{}.NaivStandard(matriz1, matriz2, matriz3)
+
 	for _, algoritmo := range algoritmos {
 
 		matriz3 = algoritmo.Run(matriz1, matriz2, matriz3)
-		imprimirMatriz(matriz3)
+		//Se compara la matriz 3 con la matriz 4 que es la matriz que se obtiene con el algoritmo NaivStandard
+		if !reflect.DeepEqual(matriz3, matriz4) {
+			fmt.Println("La matriz 3 no es igual a la matriz 4")
+		} else {
+			fmt.Println("La matriz 3 es igual a la matriz 4")
+		}
 
 	}
+
 
 }
 

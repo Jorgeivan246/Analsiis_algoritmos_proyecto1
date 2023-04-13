@@ -7,11 +7,8 @@ func (s A10_StrassenWinograd) StrassenWinograd(a [][]int, b [][]int) [][]int {
 	n := len(a)
 
 	// Caso base
-	if n == 1 {
-		c := make([][]int, 1)
-		c[0] = make([]int, 1)
-		c[0][0] = a[0][0] * b[0][0]
-		return c
+	if n <= 16 {
+		return A1_NaivStandard{}.NaivStandard(a, b, nil)
 	}
 
 	aAux := make([][]int, n)
