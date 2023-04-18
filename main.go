@@ -49,7 +49,7 @@ func main() {
 	algoritmos = append(algoritmos, A15_V_3SequentialBlock{})
 	algoritmos = append(algoritmos, A16_V_4ParallelBlock{})
 
-	//	enviarDatosAlServidor(algoritmos)
+	enviarDatosAlServidor(algoritmos)
 	// probarALgoritmo(algoritmos)
 
 	ejecutar_script_graficas()
@@ -127,7 +127,7 @@ func enviarDatosAlServidor(algoritmos []algoritmo) {
 
 	var matriz3 [][]int
 
-	var cantidadCasosPrueba = 2
+	var cantidadCasosPrueba = 12
 
 	var tamanoMatrizAleer = 1
 
@@ -212,7 +212,7 @@ func probarALgoritmo(algoritmos []algoritmo) {
 
 	var matriz4 [][]int
 
-	var tamanoMatrizAleer = 10
+	var tamanoMatrizAleer = 7
 
 	tamano := float64(math.Pow(2, float64(tamanoMatrizAleer)))
 

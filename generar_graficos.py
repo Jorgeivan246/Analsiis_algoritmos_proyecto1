@@ -47,7 +47,7 @@ def obtenerPromedioEjecucionAlgoritmos(df):
 
     valores_metodos=[]
 
-    
+    valores_metodos_promedio =[]
 
     for j in range (len(df.index)):
 
@@ -71,10 +71,12 @@ def obtenerPromedioEjecucionAlgoritmos(df):
 
                 except ValueError as e:
                     print(f"No se pudo convertir el valor a entero: {elemento}")
-            
-
+        #Esta linea lo divide entre 12 sacando el promedio
         valores_metodos.append(valores_algoritmo)
-    return valores_metodos   
+        valores_algoritmo=(valores_algoritmo)/12
+        valores_metodos_promedio.append(valores_algoritmo)
+
+    return valores_metodos,valores_metodos_promedio   
 
 """
 Esta funcion genera un grafico de barras con los tiempos de ejecucion de cada algoritmo
@@ -84,10 +86,19 @@ def generar_grafico_barras_promedio_tiempo_algoritmos(tiempo_ejecucion):
     etiquetas_metodos = ["NaivStandard", "NaivOnArray", "NaivKahan", "NaivLoopUnrollingTwo", "NaivLoopUnrollingThree", "NaivLoopUnrollingFour", "WinogradOriginal", "WinogradScaled", "StrassenNaiv", "StrassenWinograd", "III.3 Sequential block", "III.4 Parallel Block", "IV.3 Sequential block", "IV.4 Parallel Block", "V.3 Sequential block", "V.4 Parallel Block"]
 
 
+    diccionario = dict(zip(etiquetas_metodos,tiempo_ejecucion))
+    diccionario_ordenado = dict(sorted(diccionario.items(), key=lambda item: item[1]))
+
+    claves = list(diccionario_ordenado.keys())
+    valores = list(diccionario_ordenado.values())
+
+
+    plt.clf()  
+    plt.barh(claves, valores)
 
 
 
-    plt.barh(etiquetas_metodos, tiempo_ejecucion)
+    # plt.barh(etiquetas_metodos, tiempo_ejecucion)
     plt.xlabel('Tiempo en segundos')
     plt.ylabel('Algoritmos')
     plt.title('Tiempo de ejecucion por algoritmo')
@@ -250,10 +261,11 @@ def generar_graficas(df):
 
 
         
-        plt.savefig('graficos/grafico_'+etiquetas_metodos[j]+'.png')
-        plt.clf()  
+        plt.savefig('graficos/grafico_'+etiquetas_metodos[j]+str(j)+'.png')
+        # plt.clf()  
         # plt.show()
-
+    plt.title('Algoritmos respecto al tiempo')
+    plt.savefig('graficos/grafico_5.png')
 
 
 if __name__ == "__main__":
@@ -267,15 +279,17 @@ if __name__ == "__main__":
 
     dfn = pd.DataFrame(datos_todos_los_algoritmos)
 
-    tiempo_ejecucion=obtenerPromedioEjecucionAlgoritmos(dfn)
-    tiempo_2 = tiempo_ejecucion.copy()
-    generar_grafico_barras_promedio_tiempo_algoritmos(tiempo_ejecucion)
+    valores_metodos,valores_metodos_promedio=obtenerPromedioEjecucionAlgoritmos(dfn)
+
+    generar_graficas(dfn)
+
+    generar_grafico_barras_promedio_tiempo_algoritmos(valores_metodos)
     
-    generar_grafico_barras_promedio_tiempo_algoritmos_ascendente(tiempo_2)
+    generar_grafico_barras_promedio_tiempo_algoritmos_ascendente(valores_metodos_promedio)
 
 
     #Se llama a la funcion que genera las graficas 
-    generar_graficas(dfn)
+    
 
 
 
@@ -286,18 +300,3 @@ if __name__ == "__main__":
     dfp=armar_tabla(dfp)
     # #Se genera un pdf con las medidas
     generar_pdf(dfp)
-
-
-
-
-
- 
-
-
-            
-
-
-           
-
-
-    
