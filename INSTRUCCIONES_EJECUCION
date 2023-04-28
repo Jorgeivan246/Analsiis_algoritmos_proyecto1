@@ -1,0 +1,11 @@
+        Tener instalado VSC
+        Abrir el archivo main.go con VSC
+        En la consola de comando ir a la direccion en la que se ubica main.go
+        escribir go build en la temrinar
+        escribir go run mod1 en la terminal
+        
+        ir al archivo generar_graficos.py
+        ir en la linea de comandos a la ubicacion del archivo
+        ejecutar en la linea de comandos python generar_graficos.py o segun corresponda
+        instalar las librerias señaldas
+        ejecutar de nuevo el archivo .py
