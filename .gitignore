@@ -16,7 +16,6 @@ matrices/
 # Go workspace file
 go.work
 
-graficos/*.png
-graficos/*.pdf
+
 
 matrices/*.txt
