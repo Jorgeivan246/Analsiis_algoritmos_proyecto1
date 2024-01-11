@@ -17,7 +17,7 @@ Entre los algoritmos implementados están secuenciales y concurrentes con el uso
 
 En el siguiente diagrama de componentes se puede observar las relaciones entre las partes como componen el proyecto
 
-![Diagrama de componentes](diagrama_componentes/d_t.drawio.png)
+![Diagrama de componentes](graficos/d_t.drawio.png)
 
 Con ayuda del siguiente grafico se concluye que los algoritmos concurrentes son mas eficientes:
 
