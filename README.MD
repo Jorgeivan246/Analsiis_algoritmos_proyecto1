@@ -21,4 +21,4 @@ En el siguiente diagrama de componentes se puede observar las relaciones entre l
 
 Con ayuda del siguiente grafico se concluye que los algoritmos concurrentes son mas eficientes:
 
-![Grafico de comparación del tiempo de ejecución](graficos\grafico_5.png)
+![Grafico de comparación del tiempo de ejecución](graficos/grafico_5.png)
