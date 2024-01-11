@@ -2,7 +2,7 @@
 # Proyecto de Multiplicación de matrices en Go
 
 
-Este proyecto usa las siguientes tecnologias:
+Este proyecto usan las siguientes tecnologias:
 
 - Go
 - Appsscript
