@@ -20,8 +20,6 @@ def leer_hoja_calculo():
     # Autenticar la conexión
     client = gspread.authorize(creds)
 
-    # Abrir la hoja de Google Sheets por su clave única
-    sheet = client.open_by_key('1baeM9y-PVOgMQLxmVwiQBcYA6yl05yPRAFwErRlDNOg')
 
     # Leer los datos de la primera hoja de la hoja de Google Sheets
     worksheet = sheet.sheet1
